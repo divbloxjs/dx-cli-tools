@@ -1,13 +1,13 @@
 {
     "name": "dx-cli-tools",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "module",
-    "description": "",
+    "description": "A collection of functions for basic terminal management. Use by Divblox CLI",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
-    "author": "",
-    "license": "ISC"
+    "author": "Dani Simeonov (dani.simeonov@stratusolve.com)",
+    "license": "MIT"
 }
