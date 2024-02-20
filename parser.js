@@ -91,7 +91,6 @@ const supportedArguments = {
  * @typedef runParams
  * @property {Object<string, supportedArgument>} supportedArguments
  * @property {string} cliName
- * @property {string} versionNumber
  */
 
 /**
@@ -108,7 +107,6 @@ const supportedArguments = {
  */
 export const run = async (runParams = {}) => {
     cliToolName = runParams?.cliToolName ?? "my-cli";
-    versionNumber = runParams?.versionNumber ?? "0.0.0";
 
     Object.keys(runParams?.supportedArguments ?? {}).forEach((argName) => {
         supportedArguments[argName] = runParams.supportedArguments[argName];
