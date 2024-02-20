@@ -73,9 +73,8 @@ const version = {
         stdout.on("data", (data) => {
             const posStartOfVersionNumber = data.toString().indexOf(cliToolName) + cliToolName.length + 1;
             const remainingString = data.toString().substring(posStartOfVersionNumber, data.toString().length);
-            const finalVersion = remainingString.substring(0, remainingString.indexOf(" "));
 
-            console.log(`${cliToolName} CLI version: ${finalVersion}`);
+            console.log(`${cliToolName} CLI version: ${remainingString}`);
         });
     },
 };
