@@ -1,6 +1,6 @@
 {
     "name": "dx-cli-tools",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "type": "module",
     "description": "A collection of functions for basic terminal management. Use by Divblox CLI",
     "main": "index.js",
