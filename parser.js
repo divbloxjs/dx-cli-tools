@@ -1,5 +1,6 @@
+import { exec } from "child_process";
+
 let cliToolName = "my-cli";
-let versionNumber = "0.0.0";
 
 export const parseInputArguments = () => {
     let parsedArgs = { unknowns: [] };
@@ -67,8 +68,15 @@ const help = {
 const version = {
     name: "version",
     description: `Prints the currently installed version of the ${cliToolName} CLI`,
-    f: async () => {
-        console.log(`${cliToolName} CLI version: ${versionNumber}`);
+    f: () => {
+        const { stdout } = exec(`npm list -g ${cliToolName}`);
+        stdout.on("data", (data) => {
+            const posStartOfVersionNumber = data.toString().indexOf(cliToolName) + cliToolName.length + 1;
+            const remainingString = data.toString().substring(posStartOfVersionNumber, data.toString().length);
+            const finalVersion = remainingString.substring(0, remainingString.indexOf(" "));
+
+            console.log(`${cliToolName} CLI version: ${finalVersion}`);
+        });
     },
 };
 
