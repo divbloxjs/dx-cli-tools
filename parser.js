@@ -1,4 +1,6 @@
 import { exec } from "child_process";
+import { readFileSync } from "fs";
+import { pathToFileURL } from "url";
 
 let cliToolName = "my-cli";
 
@@ -69,12 +71,22 @@ const version = {
     name: "version",
     description: `Prints the currently installed version of the ${cliToolName} CLI`,
     f: () => {
+        const localPackageJSONPath = pathToFileURL(`${process.cwd()}/node_modules/${cliToolName}/package.json`);
+        try {
+            const fileContentStr = readFileSync(localPackageJSONPath, { encoding: "utf-8" }).toString();
+            const packageJSON = JSON.parse(fileContentStr);
+            const localVersion = packageJSON.version;
+            console.log(`${cliToolName} CLI local version: ${localVersion}`);
+        } catch (err) {
+            console.log(`Unable to retrieve info for ${cliToolName} CLI local version\n`, err);
+        }
+
         const { stdout } = exec(`npm list -g ${cliToolName}`);
         stdout.on("data", (data) => {
             const posStartOfVersionNumber = data.toString().indexOf(cliToolName) + cliToolName.length + 1;
             const remainingString = data.toString().substring(posStartOfVersionNumber, data.toString().length);
 
-            console.log(`${cliToolName} CLI version: ${remainingString}`);
+            console.log(`${cliToolName} CLI global version: ${remainingString}`);
         });
     },
 };
