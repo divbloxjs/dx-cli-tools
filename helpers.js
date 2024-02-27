@@ -114,15 +114,22 @@ export const getCommandLineInput = async (question = "") => {
 /**
  * Executes a command on the terminal
  * @param command The command to execute
- * @return {Promise<{stdout, stderr}>}
+ * @return {Promise<string>}
  */
 export const executeCommand = async (command) => {
-    try {
-        const { stdout, stderr } = exec(command);
-        return { stdout, stderr };
-    } catch (e) {
-        console.error(e); // should contain code (exit code) and signal (that caused the termination).
-    }
+    return new Promise((resolve, reject) => {
+        try {
+            const { stdout, stderr } = exec(command);
+            stdout.on("data", (data) => {
+                resolve(data);
+            });
+            stderr.on("data", (data) => {
+                reject(data);
+            });
+        } catch (err) {
+            reject(err);
+        }
+    });
 };
 
 /**
