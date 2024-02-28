@@ -1,6 +1,7 @@
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { exec } from "child_process";
+import { exec } from "node:child_process";
+import util from "node:util";
 /**
  * A color reference to be used with outputFormattedLog()
  */
@@ -117,19 +118,15 @@ export const getCommandLineInput = async (question = "") => {
  * @return {Promise<string>}
  */
 export const executeCommand = async (command) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const { stdout, stderr } = exec(command);
-            stdout.on("data", (data) => {
-                resolve(data);
-            });
-            stderr.on("data", (data) => {
-                reject(data);
-            });
-        } catch (err) {
-            reject(err);
-        }
-    });
+    // promisify exec
+    const execPromise = util.promisify(exec);
+    try {
+        // wait for exec to complete
+        const { stdout, stderr } = await execPromise(command);
+        return { output: stdout, error: stderr };
+    } catch (error) {
+        return { output: "", error: error };
+    }
 };
 
 /**
